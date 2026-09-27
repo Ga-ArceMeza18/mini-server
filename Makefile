@@ -35,6 +35,9 @@ $(BIN_DIR)/server_safe: $(BUILD_DIR)/server_safe.o $(COMMON_OBJ) | $(BIN_DIR)
 $(BIN_DIR)/load_client: $(BUILD_DIR)/load_client.o | $(BIN_DIR)
 	$(CC) $(LDFLAGS) -o $@ $^
 
+$(BIN_DIR)/server_producer-consumer: $(BUILD_DIR)/server_producer-consumer.o $(COMMON_OBJ) | $(BIN_DIR)
+	$(CC) $(LDFLAGS) -o $@ $^
+
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
