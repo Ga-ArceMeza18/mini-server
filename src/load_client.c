@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <time.h>
 #include <unistd.h>
 
 pthread_mutex_t data_lock;
@@ -65,6 +66,11 @@ static void *worker(void *arg)
 
 int main(int argc, char **argv)
 {
+    struct timespec start;
+    struct timespec end;
+
+    clock_gettime(CLOCK_MONOTONIC, &start);
+
     if (argc != 5) {
         fprintf(stderr,
                 "usage: %s <host> <port> <threads> <requests-per-thread>\n",
@@ -126,6 +132,13 @@ int main(int argc, char **argv)
 
     pthread_mutex_destroy(&data_lock);
 
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    long seconds = end.tv_sec - start.tv_sec;
+    long nanoseconds = end.tv_nsec - start.tv_nsec;
+
+    long long execution_time_ms = (long long)seconds * 1000 + nanoseconds / 1000000;
+
+    printf("execution time: %lld ms\n", execution_time_ms);
     printf("requests completed: %lu\n", total);
 
     free(tids);
